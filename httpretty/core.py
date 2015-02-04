@@ -77,7 +77,7 @@ old_create_connection = socket.create_connection
 old_gethostbyname = socket.gethostbyname
 old_gethostname = socket.gethostname
 old_getaddrinfo = socket.getaddrinfo
-old_fileobject = None
+old_fileobject = socket._fileobject
 old_socksocket = None
 old_ssl_wrap_socket = None
 old_sslwrap_simple = None
@@ -893,9 +893,9 @@ class httpretty(HttpBaseClass):
         )
         for matcher, value in items:
             if matcher.matches(info):
-                return (matcher, info)
+                return matcher, info
 
-        return (None, [])
+        return None, []
 
     @classmethod
     @contextlib.contextmanager
@@ -903,7 +903,8 @@ class httpretty(HttpBaseClass):
         try:
             import urllib3
         except ImportError:
-            raise RuntimeError('HTTPretty requires urllib3 installed for recording actual requests.')
+            raise RuntimeError('HTTPretty requires urllib3 installed for'
+                               ' recording actual requests.')
 
 
         http = urllib3.PoolManager()
