@@ -57,7 +57,7 @@ def parse_requirements(path):
     function properly.
     """
     try:
-        requirements = [req.strip() for req in local_file(path).splitlines()]
+        requirements = [req.strip() for req in local_file(path).splitlines() if not req.startswith('-r ')]
     except IOError:
         raise RuntimeError("Couldn't find the `requirements/use.txt' file :(")
 
@@ -94,7 +94,7 @@ setup(name='httpretty',
       url='http://github.com/gabrielfalcao/httpretty',
       zip_safe=False,
       packages=find_packages(exclude=['*tests*']),
-      tests_require=parse_requirements('test-requirements.txt'),
+      tests_require=parse_requirements('requirements/test.txt'),
       install_requires=install_requires,
       dependency_links=dependency_links,
       license='MIT',
